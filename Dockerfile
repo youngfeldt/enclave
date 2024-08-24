@@ -17,16 +17,16 @@ COPY . .
 RUN cargo build --release
 
 # Build the final image
-FROM amazonlinux:2
+FROM amazonlinux:2023
 
-# Install Nitro Enclaves CLI tools
-RUN yum install -y \
-    amazon-nitro-enclaves-cli \
-    amazon-nitro-enclaves-nsm-cli \
-    && yum clean all
+RUN dnf update -y && \
+    dnf install -y \
+    aws-nitro-enclaves-cli \
+    tar gzip shadow-utils && \
+    dnf clean all
 
 # Copy the compiled binary from the builder stage
-COPY --from=builder /app/target/release/enclave-main /enclave-main
+COPY --from=builder /app/target/release/enclave_attestation /enclave-main
 
 # Entry point for the Docker container
 ENTRYPOINT ["/enclave-main"]
