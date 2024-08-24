@@ -5,8 +5,11 @@ fn main() -> std::io::Result<()> {
     let cid = 3; // CID for the parent instance
     let port = 5005; // The same port number used by the parent listener
 
-    // Connect to the parent instance VSOCK listener
-    let mut stream = VsockStream::connect(cid, port)?;
+    // Create a VsockAddr with the parent CID and port
+    let addr = VsockAddr::new(cid, port);
+
+    // Connect to the parent instance VSOCK listener using the VsockAddr
+    let mut stream = VsockStream::connect(&addr)?;
 
     let attestation_doc = get_attestation_document("example_user_data")?;
     stream.write_all(attestation_doc.as_bytes())?;
