@@ -1,6 +1,7 @@
 use std::io::prelude::*;
 use serde_json::Value;
-use vsock::{VsockListener, VsockAddr, libc::VMADDR_CID_ANY};
+use vsock::{VsockListener, VsockAddr};
+use libc::VMADDR_CID_ANY; // Import libc directly for VMADDR_CID_ANY
 
 fn handle_client(mut stream: vsock::VsockStream) -> std::io::Result<()> {
     let mut buffer = String::new();
