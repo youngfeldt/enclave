@@ -1,8 +1,8 @@
 use std::io::prelude::*;
 use serde_json::Value;
-use vsock::VsockListener;
+use vsock::{VsockListener, VsockStream};
 
-fn handle_client(mut stream: vsock::VsockStream) -> std::io::Result<()> {
+fn handle_client(mut stream: VsockStream) -> std::io::Result<()> {
     let mut buffer = String::new();
     stream.read_to_string(&mut buffer)?;
 

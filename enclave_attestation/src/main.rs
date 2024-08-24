@@ -1,7 +1,9 @@
+use std::error::Error; // Import the Error trait
 use std::io::prelude::*;
-use vsock::VsockStream;
+use vsock::{VsockStream, VsockAddr};
 
-fn main() -> std::io::Result<()> {
+
+fn main() -> Result<(), Box<dyn Error>> {
     let cid = 3; // CID for the parent instance
     let port = 5005; // The same port number used by the parent listener
 
