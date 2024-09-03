@@ -23,9 +23,14 @@ FROM amazonlinux:2023
 
 RUN dnf update -y && \
     dnf install -y \
-    aws-nitro-enclaves-cli \
+    aws-nitro-enclaves-cli  gcc git make cmake openssl-devel\
     tar gzip shadow-utils && \
     dnf clean all
+
+RUN git clone https://github.com/aws/aws-nitro-enclaves-cli.git && \
+     cd aws-nitro-enclaves-cli && \
+     mkdir build && cd build && \
+     cmake .. && make && cp bin/nsm-cli /usr/local/bin/
 
 # Copy the compiled binary from the builder stage
 COPY --from=builder /app/target/release/enclave_attestation /enclave-main
