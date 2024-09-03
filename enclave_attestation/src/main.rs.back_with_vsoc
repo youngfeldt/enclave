@@ -1,19 +1,22 @@
 use std::error::Error; // Import the Error trait
-use std::fs::File;
 use std::io::prelude::*;
+use vsock::{VsockStream, VsockAddr};
+
 
 fn main() -> Result<(), Box<dyn Error>> {
-    // Set the output file path
-    let file_path = "attestation_document.txt";
+    let cid = 3; // CID for the parent instance
+    let port = 5005; // The same port number used by the parent listener
 
-    // Retrieve the attestation document
+    // Create a VsockAddr with the parent CID and port
+    let addr = VsockAddr::new(cid, port);
+
+    // Connect to the parent instance VSOCK listener using the VsockAddr
+    let mut stream = VsockStream::connect(&addr)?;
+
     let attestation_doc = get_attestation_document("example_user_data")?;
+    stream.write_all(attestation_doc.as_bytes())?;
 
-    // Write the attestation document to a file
-    let mut file = File::create(file_path)?;
-    file.write_all(attestation_doc.as_bytes())?;
-
-    println!("Attestation document written to file: {}", file_path);
+    println!("Sent attestation document to parent. Staying alive...");
 
     // Keep the enclave alive
     loop {
