@@ -1,5 +1,10 @@
 # enclave
 
+## Work in progress
+
+# Idea: 
+  Have a process in enclave that retrieves attestation document and sends it to the parent.
+
 ## To Make
 
 1. cd enclave attestation
